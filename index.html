@@ -28,167 +28,7 @@
       },
     }
   </script>
-
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Poppins', sans-serif; background: #0F0F0F; color: #fff; overflow-x: hidden; }
-
-    /* Floating Hearts */
-    .hearts-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-    .heart { position: absolute; bottom: -80px; font-size: 1.2rem; opacity: 0; animation: floatUp linear infinite; }
-    @keyframes floatUp {
-      0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
-      10%  { opacity: 0.6; }
-      90%  { opacity: 0.15; }
-      100% { transform: translateY(-110vh) rotate(25deg); opacity: 0; }
-    }
-
-    /* Hero */
-    .hero-gradient { background: radial-gradient(ellipse at 60% 40%, #3a0a14 0%, #1a0006 40%, #0F0F0F 100%); }
-
-    /* Reveal */
-    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    /* Counter */
-    .digit-box { background: rgba(255,77,109,0.12); border: 1px solid rgba(255,77,109,0.3); border-radius: 0.75rem; padding: 0.75rem 1rem; min-width: 72px; text-align: center; }
-    .digit-num { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 5vw, 2.8rem); color: #FF4D6D; line-height: 1; }
-    .digit-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #BDBDBD; margin-top: 0.25rem; }
-
-    /* Player Card */
-    .player-card {
-      background: linear-gradient(145deg, #1a0a0f 0%, #250d15 50%, #1a1a1a 100%);
-      border: 1px solid rgba(255,77,109,0.25);
-      border-radius: 1.5rem;
-      overflow: hidden;
-      position: relative;
-    }
-    .player-card::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(circle at 30% 30%, rgba(255,77,109,0.08) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    /* Vinyl disc */
-    .vinyl-disc {
-      width: 150px; height: 150px;
-      border-radius: 50%;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 0 3px #1a1a1a, 0 0 0 6px rgba(255,77,109,0.25), 0 8px 40px rgba(0,0,0,0.6);
-      animation: spin 14s linear infinite;
-      animation-play-state: paused;
-      flex-shrink: 0;
-    }
-    .vinyl-disc.playing { animation-play-state: running; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .vinyl-disc img { width: 100%; height: 100%; object-fit: cover; }
-    .vinyl-disc::after {
-      content: '';
-      position: absolute; inset: 0;
-      border-radius: 50%;
-      background: radial-gradient(circle at 50% 50%,
-        transparent 26%, rgba(0,0,0,0.5) 27%, transparent 28%,
-        transparent 33%, rgba(0,0,0,0.3) 34%, transparent 35%,
-        transparent 40%, rgba(0,0,0,0.2) 41%, transparent 42%,
-        transparent 47%, rgba(0,0,0,0.15) 48%, transparent 49%
-      );
-    }
-    .vinyl-hole {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      background: #0F0F0F;
-      border: 2px solid rgba(255,77,109,0.6);
-      z-index: 3;
-    }
-
-    /* Waveform bars */
-    .wave { display: flex; align-items: center; gap: 3px; height: 28px; }
-    .wave-bar {
-      width: 3px; background: #FF4D6D; border-radius: 2px; opacity: 0.7;
-      animation: wavePulse 1.2s ease-in-out infinite;
-    }
-    .wave-bar:nth-child(1) { animation-delay: 0s;    height: 40%; }
-    .wave-bar:nth-child(2) { animation-delay: 0.1s;  height: 80%; }
-    .wave-bar:nth-child(3) { animation-delay: 0.2s;  height: 60%; }
-    .wave-bar:nth-child(4) { animation-delay: 0.3s;  height: 100%;}
-    .wave-bar:nth-child(5) { animation-delay: 0.4s;  height: 55%; }
-    .wave-bar:nth-child(6) { animation-delay: 0.2s;  height: 75%; }
-    .wave-bar:nth-child(7) { animation-delay: 0.1s;  height: 45%; }
-    .wave.paused .wave-bar { animation-play-state: paused; }
-    @keyframes wavePulse {
-      0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
-      50%       { transform: scaleY(1);   opacity: 1; }
-    }
-
-    /* Progress */
-    .progress-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 99px; cursor: pointer; position: relative; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, #FF4D6D, #FF758F); border-radius: 99px; width: 0%; transition: width 0.5s linear; }
-
-    /* Control buttons */
-    .ctrl-btn { background: none; border: none; color: #BDBDBD; cursor: pointer; padding: 0.3rem; transition: color 0.2s, transform 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
-    .ctrl-btn:hover { color: #fff; transform: scale(1.15); }
-    .ctrl-btn.play-btn { background: #FF4D6D; color: white; width: 50px; height: 50px; font-size: 1.1rem; box-shadow: 0 0 25px rgba(255,77,109,0.5); }
-    .ctrl-btn.play-btn:hover { background: #FF758F; transform: scale(1.08); }
-
-    /* Spotify embed */
-    .spotify-embed iframe { border-radius: 12px; }
-
-    /* Gallery */
-    .photo-item { position: relative; overflow: hidden; border-radius: 1rem; cursor: pointer; aspect-ratio: 1; transition: transform 0.35s ease, box-shadow 0.35s ease; }
-    .photo-item:hover { transform: scale(1.04); box-shadow: 0 0 30px rgba(255,77,109,0.35); }
-    .photo-item img { width: 100%; height: 100%; object-fit: cover; transition: filter 0.3s; }
-    .photo-item:hover img { filter: brightness(1.1) saturate(1.2); }
-    .photo-overlay { position: absolute; inset: 0; background: rgba(255,77,109,0); transition: background 0.3s; }
-    .photo-item:hover .photo-overlay { background: rgba(255,77,109,0.15); }
-
-    /* Lightbox */
-    #lightbox { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
-    #lightbox.open { display: flex; }
-    #lightbox img { max-width: 90vw; max-height: 80vh; border-radius: 1rem; object-fit: contain; box-shadow: 0 0 60px rgba(255,77,109,0.3); }
-    .lb-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,77,109,0.2); border: 1px solid rgba(255,77,109,0.4); color: white; width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
-    .lb-btn:hover { background: rgba(255,77,109,0.5); }
-    #lb-prev { left: 16px; }
-    #lb-next { right: 16px; }
-    #lb-close { position: absolute; top: 16px; right: 16px; background: rgba(255,77,109,0.2); border: 1px solid rgba(255,77,109,0.4); color: white; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-    /* Envelope */
-    .envelope-wrap { perspective: 800px; }
-    .envelope { position: relative; width: min(480px, 90vw); margin: 0 auto; cursor: pointer; user-select: none; }
-    .env-body { background: linear-gradient(145deg, #1c0a0f 0%, #2a1018 100%); border: 1.5px solid rgba(255,77,109,0.35); border-radius: 0.5rem 0.5rem 1rem 1rem; padding: 2.5rem 2rem 2rem; position: relative; overflow: hidden; }
-    .env-flap { position: absolute; top: 0; left: 0; right: 0; height: 50%; background: linear-gradient(160deg, #2a1018, #3a1520); border-radius: 0.5rem 0.5rem 0 0; clip-path: polygon(0 0, 50% 60%, 100% 0); transform-origin: top center; transition: transform 0.8s cubic-bezier(0.4,0,0.2,1); z-index: 2; border-bottom: 1px solid rgba(255,77,109,0.2); }
-    .envelope.open .env-flap { transform: rotateX(-180deg); }
-    .env-letter { background: rgba(255,255,255,0.03); border-radius: 0.75rem; padding: 1.75rem; border: 1px solid rgba(255,77,109,0.15); max-height: 0; overflow: hidden; opacity: 0; transition: max-height 1s ease, opacity 0.8s ease 0.4s; }
-    .envelope.open .env-letter { max-height: 600px; opacity: 1; }
-    .env-hint { transition: opacity 0.3s; }
-    .envelope.open .env-hint { opacity: 0; pointer-events: none; }
-
-    /* Section divider */
-    .heart-divider { display: flex; align-items: center; gap: 1rem; margin: 0 auto; max-width: 320px; }
-    .heart-divider::before, .heart-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,77,109,0.4)); }
-    .heart-divider::after { background: linear-gradient(270deg, transparent, rgba(255,77,109,0.4)); }
-
-    /* Pulse */
-    @keyframes pulse-heart { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
-    .pulse { animation: pulse-heart 1.8s ease-in-out infinite; display: inline-block; }
-
-    /* Shake */
-    @keyframes shake { 0%, 100% { transform: rotate(0deg); } 20% { transform: rotate(-4deg); } 40% { transform: rotate(4deg); } 60% { transform: rotate(-3deg); } 80% { transform: rotate(3deg); } }
-    .shake { animation: shake 0.6s ease; }
-
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0f0f0f; }
-    ::-webkit-scrollbar-thumb { background: #FF4D6D; border-radius: 3px; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .heart, .reveal, .vinyl-disc, .wave-bar { animation: none !important; }
-      .reveal { opacity: 1; transform: none; }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css?v=1.0" />
 </head>
 <body class="font-body bg-midnight text-white">
 
@@ -204,7 +44,7 @@
 
   <!-- HERO -->
   <section class="hero-gradient relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 z-10">
-    <p class="text-rose font-body font-light tracking-[0.25em] text-sm mb-4 uppercase reveal" id="hero-names"></p>
+    <p class="text-rose font-body font-light tracking-[0.75em] text-sm mb-4 uppercase reveal" id="hero-names"></p>
     <h1 class="font-display text-white leading-none mb-6 reveal" style="font-size: clamp(5rem, 18vw, 11rem); letter-spacing: -0.02em; font-style: italic;">Te Amo</h1>
     <p class="font-body font-light text-neutral max-w-sm mx-auto text-base leading-relaxed reveal">
       Cada segundo ao seu lado é o melhor presente que a vida já me deu.
@@ -245,7 +85,7 @@
         <div class="flex justify-center mb-6">
           <div class="relative">
             <img id="music-cover" src="" alt="Foto do casal"
-              class="w-56 h-56 md:w-64 md:h-64 rounded-2xl object-cover shadow-2xl ring-2 ring-romantic/40" />
+              class="w-64 h-64 md:w-72 md:h-72 rounded-2xl object-cover shadow-2xl ring-2 ring-romantic/40" />
             <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/50 to-transparent"></div>
             <div class="absolute bottom-3 left-0 right-0 text-center">
               <div id="music-title" class="font-display text-white text-lg font-bold drop-shadow"></div>
