@@ -39,7 +39,7 @@ Você é só minha e eu sou só seu. Quero que você saiba que nunca vou te deix
 
 Meu amor por você é imenso, maior do que qualquer distância ou dificuldade. Eu te amo até o infinito e além.
 
-Te amo muito.
+Se estiver feliz, dê uma gargalhada.
 `,
 
 };
