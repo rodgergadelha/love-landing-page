@@ -17,7 +17,7 @@ const CONFIG = {
   // --- Música do casal ---
   musica: {
     // ID do Spotify: parte final do link open.spotify.com/track/XXXXXXXXXXX
-    spotifyTrackId: "352FuGmGJClPjojSYjNrXG",
+    spotifyTrackId: "7adDwlHWhWSO5h1adBxvph",
     // Foto que aparece como capa (use uma foto de vocês dois!)
     fotoCasal: "./images/foto7.jpeg",
   },
